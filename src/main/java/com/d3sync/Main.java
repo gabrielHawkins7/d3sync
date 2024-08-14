@@ -1,35 +1,35 @@
 package com.d3sync;
 
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
+import java.awt.BorderLayout;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
-import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
+import static com.d3sync.Utils.*;
+import com.d3sync.Observables.ObservableArray;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        File f = new File("/Users/gabrielhawkins/Documents");
+        File s = new File("/Users/gabrielhawkins/Downloads/Bakcup");
 
-        FlatLightLaf.setup();
+        Controller controller = new Controller();
 
-
-        JFrame frame = new JFrame("D3 Sync");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-        String[] objects = {
-            "Documents Sync Start Time: 12/30/24 Duration: 00:30:00"
-        };
-
-        JList list = new JList<>(objects);
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        list.setVisibleRowCount(-1);
-        JScrollPane listScroller = new JScrollPane(list);
-        frame.getContentPane().add(listScroller);
+        controller.statusList.addElement("This is a test");
+        controller.scheduleList.addElement(new ScheduledSync("Sync1", new SyncConfig(f,s, TARGET.LOCAL, PLATFORM.MAC), LocalDateTime.now(), false));
 
 
-        frame.setSize(600, 600);
-        frame.setVisible(true);
     }
 }

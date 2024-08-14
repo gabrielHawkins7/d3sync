@@ -1,28 +1,19 @@
 package com.d3sync;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Utils {
     
-    public record  SSHConfig(String host, String username, String password) {
-
-    }
-    public record ScheduledSync(String name, SyncConfig sync, LocalDateTime startTime, Time duration) {
-        public ScheduledSync updateTime(LocalDateTime newTime){
-            return new ScheduledSync(name, sync, newTime, duration);
-        }
-        public String toString(){
-            return "" + name + " StartTime: " + startTime + " Every: " + duration;
+    public record SyncConfig(File source, File destination, TARGET TARGET, PLATFORM PLATFORM){}
+    public record ScheduledSync(String name, SyncConfig syncConfig, LocalDateTime startTime, boolean active){
+        @Override
+        public final String toString() {
+            return "" + name + " " + syncConfig.source.getName() + " -> " + syncConfig.destination.getName() + " " + startTime + "Active: " + active;
         }
     }
-
-    public record SyncConfig(SSHConfig ssh, String sourceDir, String targetDir, PLATFORM targetPlatform){
-
-    }
-    public record Time(int days, int hours, int minutes, int seconds){
-
-    }
+    public record Time(int day, int hour, int minute, int second){}
 
     enum Strings {
         DELETE("del /f /q /a ");
@@ -37,5 +28,9 @@ public class Utils {
     }
     enum PLATFORM{
         WINDOWS, MAC, LINUX;
+    }
+
+    enum TARGET{
+        LOCAL, NET;
     }
 }
