@@ -1,10 +1,18 @@
 package com.d3sync;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FileDialog;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -12,9 +20,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BoxView;
+
+import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.Ikonli;
+import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.swing.FontIcon;
 
 import com.d3sync.Utils.ScheduledSync;
 
@@ -33,12 +50,38 @@ public class ViewController {
         root.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initUI();
         root.setVisible(true);
+        root.pack();
 
     }
 
     public void initUI(){
+        initToolBar();
         initMainView();
         initbottomPanel();
+    }
+    private void initToolBar(){
+        JToolBar toolBar = new JToolBar();
+        JLabel syncLabel = new JLabel("Sync: ");
+        JCheckBox sync = new JCheckBox();
+        sync.setSelected(false);
+        sync.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(sync.isSelected() == true){
+                    controller.info.isSyncing.setValue(true);
+                }else{
+                    controller.info.isSyncing.setValue(false);
+                }
+			}
+            
+        });
+
+        toolBar.add(syncLabel);
+        toolBar.add(sync);
+
+
+        root.add(toolBar, BorderLayout.NORTH);
+
     }
 
     private void initMainView(){
@@ -92,21 +135,10 @@ public class ViewController {
         controller.ui.put("speed_JLabel", speed_JLabel);
         //speed_JLabel.setBorder(new EmptyBorder(5, 0, 5, 5));
         bottomPanel.add(speed_JLabel);
-    }
 
+        JLabel sync_JLabel = new JLabel((controller.info.isSyncing.getValue())?"Sync On":"Sync Off", SwingConstants.RIGHT);
+        controller.ui.put("sync_JLabel", sync_JLabel);
+        bottomPanel.add(sync_JLabel);
 
-    public static void showPopup(JFrame root){
-        JDialog d = new JDialog(root, "dialog Box");
- 
-        // create a label
-        JLabel l = new JLabel("this is a dialog box");
-
-        d.add(l);
-
-        // setsize of dialog
-        d.setSize(100, 100);
-
-        // set visibility of dialog
-        d.setVisible(true);
     }
 }

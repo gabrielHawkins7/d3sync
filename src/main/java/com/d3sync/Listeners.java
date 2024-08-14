@@ -14,7 +14,6 @@ import javax.swing.event.ListDataListener;
 import com.d3sync.Utils.PLATFORM;
 import com.d3sync.Utils.ScheduledSync;
 import com.d3sync.Utils.SyncConfig;
-import com.d3sync.Utils.TARGET;
 
 public class Listeners {
     Controller controller;
@@ -57,16 +56,19 @@ public class Listeners {
         schedule_Add_JButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-                ViewController.showPopup(controller.viewController.root);
+                Popups.showAddPopup(controller.viewController.root, controller);
 			}
-            
         });
-
     }
     public void initBottomBarListeners(){
         controller.info.transferSpeed.addChangeListener(newValue->{
             JLabel speed = (JLabel) controller.ui.get("speed_JLabel");
             speed.setText("Transfer Speed: " + String.format("%.2f", newValue));
+        });
+
+        controller.info.isSyncing.addChangeListener(newValue->{
+            JLabel sync_JLabel = (JLabel) controller.ui.get("sync_JLabel");
+            sync_JLabel.setText((controller.info.isSyncing.getValue())?"Sync On":"Sync Off");
         });
     }
 }

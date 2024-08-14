@@ -33,5 +33,6 @@ public class Controller {
 
 class info{
     Observable<Double> transferSpeed = new Observable<Double>(0.0);
+    Observable<Boolean> isSyncing = new Observable<>(false);
 
 }

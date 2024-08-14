@@ -3,17 +3,18 @@ package com.d3sync;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Utils {
     
-    public record SyncConfig(File source, File destination, TARGET TARGET, PLATFORM PLATFORM){}
-    public record ScheduledSync(String name, SyncConfig syncConfig, LocalDateTime startTime, boolean active){
+    public record SyncConfig(File source, File destination, TRANSFER TRANSFER){}
+    public record ScheduledSync(String name, SyncConfig syncConfig, LocalTime start, LocalTime end, boolean active){
         @Override
         public final String toString() {
-            return "" + name + " " + syncConfig.source.getName() + " -> " + syncConfig.destination.getName() + " " + startTime + "Active: " + active;
+            //return"";
+            return name + " /" + syncConfig.source.getName() + " -> /" + syncConfig.destination.getName() + " Start:" + start.format(DateTimeFormatter.ofPattern("hh:mm a")) + " End:"+ end.format(DateTimeFormatter.ofPattern("hh:mm a")) +" Active: " + active;
         }
     }
-    public record Time(int day, int hour, int minute, int second){}
 
     enum Strings {
         DELETE("del /f /q /a ");
@@ -30,7 +31,7 @@ public class Utils {
         WINDOWS, MAC, LINUX;
     }
 
-    enum TARGET{
+    enum TRANSFER{
         LOCAL, NET;
     }
 }
