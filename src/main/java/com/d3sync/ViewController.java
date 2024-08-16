@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpringLayout;
@@ -33,7 +34,6 @@ import org.kordamp.ikonli.Ikonli;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.swing.FontIcon;
 
-import com.d3sync.Utils.ScheduledSync;
 
 public class ViewController {
     Controller  controller;
@@ -61,6 +61,7 @@ public class ViewController {
     }
     private void initToolBar(){
         JToolBar toolBar = new JToolBar();
+        toolBar.setBorder(new EmptyBorder(10, 10, 10, 10));
         JLabel syncLabel = new JLabel("Sync: ");
         JCheckBox sync = new JCheckBox();
         sync.setSelected(false);
@@ -93,7 +94,7 @@ public class ViewController {
         initStaus();
     }
     private void initStaus(){
-        JList<String> status_JList = new JList<>(controller.statusList);
+        JList<LogMessage> status_JList = new JList<>(controller.statusList);
         controller.ui.put("status_JList", status_JList);
         JScrollPane status_JScrollPane = new JScrollPane(status_JList);
         controller.ui.put("status_JScrollPane", status_JScrollPane);
@@ -103,7 +104,8 @@ public class ViewController {
         JPanel schedulePanel = new JPanel();
         schedulePanel.setLayout(new BoxLayout(schedulePanel, BoxLayout.Y_AXIS));
 
-        JList<ScheduledSync> schedule_JList = new JList<>(controller.scheduleList);
+        JList<SyncTask> schedule_JList = new JList<>(controller.scheduleList);
+        schedule_JList.setCellRenderer(new CustomListRenderer());
         controller.ui.put("schedule_JList", schedule_JList);
         JScrollPane schedule_JScrollPane = new JScrollPane(schedule_JList);
         controller.ui.put("schedule_JScrollPane", schedule_JScrollPane);
@@ -116,8 +118,11 @@ public class ViewController {
         controller.ui.put("schedule_Add_JButton", schedule_Add_JButton);
         JButton schedule_Edit_JButton = new JButton("Edit");
         controller.ui.put("schedule_Edit_JButton", schedule_Edit_JButton);
+        JButton schedule_Delete_JButton = new JButton("Delete");
+        controller.ui.put("schedule_Delete_JButton", schedule_Delete_JButton);
         scheduleButtons.add(schedule_Add_JButton);
         scheduleButtons.add(schedule_Edit_JButton);
+        scheduleButtons.add(schedule_Delete_JButton);
 
         schedulePanel.add(scheduleButtons);
 
@@ -132,11 +137,18 @@ public class ViewController {
     }
     private void initBottomBar(){
         JLabel speed_JLabel = new JLabel("Transfer Speed: ", SwingConstants.LEFT);
+        speed_JLabel.setBorder(new EmptyBorder(0, 5, 5, 5));
         controller.ui.put("speed_JLabel", speed_JLabel);
-        //speed_JLabel.setBorder(new EmptyBorder(5, 0, 5, 5));
+        //speed_JLabel.setBorder(new EmptyBorder(0, 0, 5, 5));
         bottomPanel.add(speed_JLabel);
 
+        JLabel files_JLabel = new JLabel("Files: ", SwingConstants.RIGHT);
+        files_JLabel.setBorder(new EmptyBorder(0, 5, 5, 5));
+        controller.ui.put("files_JLabel", files_JLabel);
+        bottomPanel.add(files_JLabel);
+
         JLabel sync_JLabel = new JLabel((controller.info.isSyncing.getValue())?"Sync On":"Sync Off", SwingConstants.RIGHT);
+        sync_JLabel.setBorder(new EmptyBorder(0, 5, 5, 5));
         controller.ui.put("sync_JLabel", sync_JLabel);
         bottomPanel.add(sync_JLabel);
 
